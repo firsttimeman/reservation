@@ -7,6 +7,8 @@ import zerobase.reservation.manager.dto.ManagerDTO;
 import zerobase.reservation.manager.dto.RegisterManager;
 import zerobase.reservation.manager.entity.Manager;
 import zerobase.reservation.manager.repository.ManagerRepository;
+import zerobase.reservation.member.entity.Member;
+import zerobase.reservation.member.repository.MemberRepository;
 
 @Service
 @AllArgsConstructor
@@ -34,6 +36,9 @@ public class ManagerServiceImpl implements  ManagerService{
 
     @Override
     public ManagerDTO memberDetail(Long id) {
-        return null;
+        Manager manager = managerRepository.findById(id).
+                orElseThrow(() -> new RuntimeException("사용자가 없음"));
+
+        return ManagerDTO.fromEntity(manager);
     }
 }

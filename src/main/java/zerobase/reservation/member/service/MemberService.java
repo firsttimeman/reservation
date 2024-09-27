@@ -7,4 +7,6 @@ public interface MemberService {
 
     MemberDTO register(RegisterMember registerMember);
 
+    MemberDTO memberDetail(Long id);
+
 }

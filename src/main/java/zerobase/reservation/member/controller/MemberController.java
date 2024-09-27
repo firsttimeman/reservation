@@ -1,11 +1,9 @@
 package zerobase.reservation.member.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import zerobase.reservation.member.dto.MemberDTO;
 import zerobase.reservation.member.dto.RegisterMember;
 import zerobase.reservation.member.service.MemberService;
@@ -23,9 +21,14 @@ public class MemberController {
     public ResponseEntity<?> register(@RequestBody RegisterMember member) {
         MemberDTO register = memberService.register(member);
 
-        return ResponseEntity.ok(register);
+        return new ResponseEntity<>(register, HttpStatus.OK);
     }
 
     // TODO 유저정보 검색기능 구현 시큐리티로 구현
+    @GetMapping("/customer/info")
+    public ResponseEntity<?> getinfo(@RequestParam("id") Long id) {
+        MemberDTO memberDTO = memberService.memberDetail(id);
+        return new ResponseEntity<>(memberDTO, HttpStatus.OK);
+    }
 
 }
