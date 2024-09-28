@@ -10,8 +10,8 @@ import zerobase.reservation.manager.entity.Manager;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ManagerDTO {
-    private Long man_id;
-    private String id;
+    private Long manId;
+    private String username;
     private String password;
     private String email;
     private String phoneNumber;
@@ -20,8 +20,8 @@ public class ManagerDTO {
     public static ManagerDTO fromEntity(Manager manager) {
 
         return ManagerDTO.builder()
-                .man_id(manager.getMan_id())
-                .id(manager.getId())
+                .manId(manager.getManId())
+                .username(manager.getUsername())
                 .password(manager.getPassword())
                 .phoneNumber(manager.getPhoneNumber())
                 .email(manager.getEmail())

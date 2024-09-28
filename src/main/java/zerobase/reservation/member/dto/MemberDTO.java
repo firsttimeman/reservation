@@ -11,8 +11,8 @@ import zerobase.reservation.member.entity.Member;
 @NoArgsConstructor
 @AllArgsConstructor
 public class MemberDTO {
-    private Long user_id;
-    private String id;
+    private Long userId;
+    private String username;
     private String password;
     private String phoneNumber;
     private String email;
@@ -21,8 +21,8 @@ public class MemberDTO {
 
     public static MemberDTO fromEntity(Member member) {
        return MemberDTO.builder()
-                .user_id(member.getUser_id())
-                .id(member.getId())
+                .userId(member.getUserId())
+                .username(member.getUsername())
                 .password(member.getPassword())
                 .phoneNumber(member.getPhoneNumber())
                 .email(member.getEmail())

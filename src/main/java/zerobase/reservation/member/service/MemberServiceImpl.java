@@ -23,7 +23,7 @@ public class MemberServiceImpl implements MemberService {
         }
 
         Member savedMember = memberRepository.save(Member.builder()
-                .id(registerMember.getId())
+                .username(registerMember.getUsername())
                 .email(registerMember.getEmail())
                 .password(registerMember.getPassword())
                 .phoneNumber(registerMember.getPhoneNumber())

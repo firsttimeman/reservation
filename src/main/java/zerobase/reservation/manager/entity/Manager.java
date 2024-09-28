@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
+import zerobase.reservation.BaseEntity;
 import zerobase.reservation.MemberType;
 
 @Entity
@@ -13,14 +14,14 @@ import zerobase.reservation.MemberType;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Manager {
+public class Manager extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long man_id;
+    private Long manId;
 
     @NotBlank
-    private String id;
+    private String username;
 
     @NotBlank
     private String password;

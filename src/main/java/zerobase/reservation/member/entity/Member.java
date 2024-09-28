@@ -17,11 +17,11 @@ public class Member extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long user_id;
+    private Long userId;
 
 
     @NotBlank
-    private String id;
+    private String username;
 
     @NotBlank
     private String password;

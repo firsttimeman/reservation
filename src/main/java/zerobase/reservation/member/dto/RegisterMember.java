@@ -9,7 +9,7 @@ import lombok.Data;
 @AllArgsConstructor
 public class RegisterMember {
 
-    private String id;
+    private String username;
     private String password;
     private String email;
     private String phoneNumber;
@@ -17,7 +17,7 @@ public class RegisterMember {
     public static RegisterMember from(MemberDTO memberDTO) {
 
         return RegisterMember.builder()
-                .id(memberDTO.getId())
+                .username(memberDTO.getUsername())
                 .password(memberDTO.getPassword())
                 .email(memberDTO.getEmail())
                 .phoneNumber(memberDTO.getPhoneNumber())

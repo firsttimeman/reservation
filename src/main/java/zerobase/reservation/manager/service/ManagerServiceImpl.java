@@ -24,7 +24,7 @@ public class ManagerServiceImpl implements  ManagerService{
         }
 
         Manager savedManager = managerRepository.save(Manager.builder()
-                .id(registerManager.getId())
+                .username(registerManager.getUsername())
                 .password(registerManager.getPassword())
                 .email(registerManager.getEmail())
                 .phoneNumber(registerManager.getPhoneNumber())
