@@ -21,7 +21,7 @@ public class CreateReview {
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
-    private static class Response {
+    public static class Response {
         private Long reviewId;
         private String content;
         private double rating;

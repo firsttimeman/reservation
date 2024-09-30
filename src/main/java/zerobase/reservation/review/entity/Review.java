@@ -25,23 +25,21 @@ public class Review extends BaseEntity {
     private String content;
 
     @Min(0)
-    @Max(9)
+    @Max(5)
     @Column(precision = 2, scale = 1)
     private double rating;
 
 
-    @ManyToOne
-    @JoinColumn(name = "member_user_id")
-    private Member member;
+   @ManyToOne
+   @JoinColumn(name = "member_user_id")
+   private Member member;
 
-    //TODO store 추가하기
+
     @ManyToOne
     @JoinColumn(name = "store_store_id")
     private Store store;
 
 
-
-    //TODO reservation 추가하기
     @ManyToOne
     @JoinColumn(name = "reservation_reservation_id")
     private Reservation reservation;
