@@ -1,7 +1,8 @@
 package zerobase.reservation.manager.dto;
 
 import lombok.*;
-import zerobase.reservation.MemberType;
+
+import zerobase.reservation.auth.type.MemberType;
 import zerobase.reservation.manager.entity.Manager;
 
 @Getter

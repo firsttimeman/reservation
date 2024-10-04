@@ -1,8 +1,9 @@
 package zerobase.reservation.manager.service;
 
 import lombok.AllArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import zerobase.reservation.MemberType;
+import zerobase.reservation.auth.type.MemberType;
 import zerobase.reservation.manager.dto.ManagerDTO;
 import zerobase.reservation.manager.dto.RegisterManager;
 import zerobase.reservation.manager.entity.Manager;
@@ -15,6 +16,7 @@ import zerobase.reservation.member.repository.MemberRepository;
 public class ManagerServiceImpl implements  ManagerService{
 
     private final ManagerRepository managerRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public ManagerDTO register(RegisterManager registerManager) {
@@ -23,12 +25,14 @@ public class ManagerServiceImpl implements  ManagerService{
             throw new RuntimeException("유저가 존재합니다");
         }
 
+        registerManager.setPassword(passwordEncoder.encode(registerManager.getPassword()));
+
         Manager savedManager = managerRepository.save(Manager.builder()
                 .username(registerManager.getUsername())
-                .password(registerManager.getPassword())
                 .email(registerManager.getEmail())
+                .password(registerManager.getPassword())
                 .phoneNumber(registerManager.getPhoneNumber())
-                .memberType(MemberType.MANAGER)
+                .memberType(MemberType.PARTNER)
                 .build());
 
         return ManagerDTO.fromEntity(savedManager);

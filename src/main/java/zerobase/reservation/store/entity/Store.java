@@ -2,6 +2,7 @@ package zerobase.reservation.store.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import zerobase.reservation.BaseEntity;
 import zerobase.reservation.manager.entity.Manager;
 import zerobase.reservation.reservation.entity.Reservation;
 import zerobase.reservation.review.entity.Review;
@@ -15,7 +16,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Store {
+public class Store extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

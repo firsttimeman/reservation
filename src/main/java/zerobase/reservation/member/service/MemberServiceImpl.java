@@ -1,8 +1,9 @@
 package zerobase.reservation.member.service;
 
 import lombok.AllArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import zerobase.reservation.MemberType;
+import zerobase.reservation.auth.type.MemberType;
 import zerobase.reservation.member.dto.MemberDTO;
 import zerobase.reservation.member.dto.RegisterMember;
 import zerobase.reservation.member.entity.Member;
@@ -13,6 +14,7 @@ import zerobase.reservation.member.repository.MemberRepository;
 public class MemberServiceImpl implements MemberService {
 
     private final MemberRepository memberRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public MemberDTO register(RegisterMember registerMember) {
@@ -22,12 +24,14 @@ public class MemberServiceImpl implements MemberService {
             throw  new RuntimeException("이미 존재하는 유저입니다");
         }
 
+        registerMember.setPassword(passwordEncoder.encode(registerMember.getPassword()));
+
         Member savedMember = memberRepository.save(Member.builder()
                 .username(registerMember.getUsername())
                 .email(registerMember.getEmail())
                 .password(registerMember.getPassword())
                 .phoneNumber(registerMember.getPhoneNumber())
-                .memberType(MemberType.CUSTOMER)
+                .memberType(MemberType.MEMBER)
                 .build());
 
 

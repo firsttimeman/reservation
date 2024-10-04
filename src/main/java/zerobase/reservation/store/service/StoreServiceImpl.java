@@ -1,6 +1,7 @@
 package zerobase.reservation.store.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import zerobase.reservation.manager.entity.Manager;
 import zerobase.reservation.manager.repository.ManagerRepository;
@@ -13,6 +14,7 @@ import zerobase.reservation.store.repository.StoreRepository;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class StoreServiceImpl implements StoreService {
@@ -58,6 +60,8 @@ public class StoreServiceImpl implements StoreService {
 
         Store store = storeRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("매장이 존재하지 않습니다."));
+        log.info("Store manager ID: " + store.getManager().getManId());
+        log.info("Passed manager ID: " +id);
 
         if(!store.getManager().getManId().equals(request.getManagerId())) {
             throw new RuntimeException("매장이 맞지 않습니다.");

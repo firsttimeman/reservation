@@ -26,7 +26,7 @@ public class Review extends BaseEntity {
 
     @Min(0)
     @Max(5)
-    @Column(precision = 2, scale = 1)
+    @Column(precision = 2)
     private double rating;
 
 

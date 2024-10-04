@@ -2,7 +2,7 @@ package zerobase.reservation.member.dto;
 
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
-import zerobase.reservation.MemberType;
+import zerobase.reservation.auth.type.MemberType;
 import zerobase.reservation.member.entity.Member;
 
 @Getter

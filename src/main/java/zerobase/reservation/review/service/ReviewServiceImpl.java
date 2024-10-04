@@ -41,7 +41,7 @@ public class ReviewServiceImpl implements ReviewService {
             throw new RuntimeException("유저가 존재하지 않습니다.");
         }
 
-        if(reviewRepository.existsByReservationId(reservationId)) {
+        if(reviewRepository.existsByReservation_ReservationId(reservationId)) {
             throw new RuntimeException("이미 존재하는 리뷰입니다.");
         }
 

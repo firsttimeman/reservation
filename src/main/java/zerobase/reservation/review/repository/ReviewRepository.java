@@ -7,5 +7,5 @@ import zerobase.reservation.review.entity.Review;
 @Repository
 public interface ReviewRepository extends JpaRepository<Review, Long> {
 
-    boolean existsByReservationId(Long id);
+    boolean existsByReservation_ReservationId(Long reservationId);
 }

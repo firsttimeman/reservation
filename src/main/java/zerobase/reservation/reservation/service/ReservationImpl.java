@@ -69,7 +69,7 @@ public class ReservationImpl implements ReservationService {
                 .orElseThrow(() -> new RuntimeException("예약이 존재하지 않습니다."));
 
         ReservationStatus reservationStatus = reservation.getReservationStatus();
-        if(reservationStatus.equals(reservation.getReservationStatus())) {
+        if(reservationStatus.equals(request.getReservationStatus())) {
             throw new RuntimeException("예약 상태가 다릅니다.");
         }
 

@@ -25,7 +25,7 @@ public class MemberController {
     }
 
     // TODO 유저정보 검색기능 구현 시큐리티로 구현
-    @GetMapping("/customer/info")
+    @GetMapping("/member/info")
     public ResponseEntity<?> getinfo(@RequestParam("id") Long id) {
         MemberDTO memberDTO = memberService.memberDetail(id);
         return new ResponseEntity<>(memberDTO, HttpStatus.OK);
