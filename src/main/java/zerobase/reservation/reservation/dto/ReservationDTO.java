@@ -1,7 +1,9 @@
 package zerobase.reservation.reservation.dto;
 
-import lombok.*;
-import org.springframework.web.bind.annotation.BindParam;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 import zerobase.reservation.reservation.entity.Reservation;
 import zerobase.reservation.reservation.type.ArrivalStatus;
 import zerobase.reservation.reservation.type.ReservationStatus;

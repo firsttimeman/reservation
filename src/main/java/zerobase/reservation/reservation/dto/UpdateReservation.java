@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import zerobase.reservation.reservation.entity.Reservation;
 import zerobase.reservation.reservation.type.ReservationStatus;
 
 import java.time.LocalDate;

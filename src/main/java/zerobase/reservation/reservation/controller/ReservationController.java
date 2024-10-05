@@ -15,6 +15,12 @@ public class ReservationController {
 
     private final ReservationService reservationService;
 
+    /**
+     * 매장 예약
+     * @param request
+     * @return
+     */
+
     @PostMapping("/create")
     @PreAuthorize("hasAnyRole('ROLE_MEMBER')")
     public CreateReservation.Response createReservation(
@@ -22,6 +28,13 @@ public class ReservationController {
 
         return CreateReservation.Response.from(reservationService.createReservation(request));
     }
+
+    /**
+     * 예약 승인 및 거부
+     * @param id
+     * @param request
+     * @return
+     */
 
     @PutMapping("/partner/approval/{id}")
     @PreAuthorize("hasAnyRole('ROLE_PARTNER')")
@@ -32,12 +45,25 @@ public class ReservationController {
         return UpdateReservation.Response.from(reservationService.updateReservation(id, request));
     }
 
+    /**
+     * 예약 리스트 조회
+     * @param id
+     * @return
+     */
+
 
     @GetMapping("/partner/reservation-list/{id}")
     @PreAuthorize("hasAnyRole('ROLE_PARTNER')")
     public SearchReservation getReservation(@PathVariable("id") Long id) {
         return SearchReservation.from(reservationService.searchReservation(id));
     }
+
+    /**
+     * 매장 도착 확인 여부 변경
+     * @param id
+     * @param request
+     * @return
+     */
 
     @PutMapping("/changearrive/{id}")
     @PreAuthorize("hasAnyRole('ROLE_MEMBER')")
@@ -46,7 +72,13 @@ public class ReservationController {
         return UpdateArrival.Response.from(reservationService.updateArrival(id, request));
     }
 
-    //TODO 다시 생각해보기
+    /**
+     * 예약 취소
+     * @param id
+     * @return
+     */
+
+
     @DeleteMapping("/cancel")
     @PreAuthorize("hasAnyRole('ROLE_MEMBER', 'ROLE_PARTNER')")
     public ResponseEntity<?> cancelReservation(@RequestParam("id") Long id) {

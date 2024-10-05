@@ -27,11 +27,15 @@ public class AuthService implements UserDetailsService {
     private final PasswordEncoder passwordEncoder;
 
 
+    /**
+     *
+     * 매니저 정보 확인 비번 확인
+     */
+
     public Manager authenticateManager(Login login) {
         Manager manager = checkManagerEmail(login.getEmail());
 
         if (!passwordEncoder.matches(login.getPassword(), manager.getPassword())) {
-//            throw new RuntimeException("비번이 일치하지 않습니다.");
             throw new CustomException(PASSWORD_NOT_MATCH);
         }
 
@@ -39,18 +43,27 @@ public class AuthService implements UserDetailsService {
 
     }
 
+    /**
+     *
+     * 유저 정보 확인 비번 확인
+     */
+
     public Member authenticateCustomer(Login login) {
         Member member = checkUserEmail(login.getEmail());
 
         if (!this.passwordEncoder.matches(login.getPassword(), member.getPassword())) {
-//            throw new  RuntimeException("비번이 일치하지 않습니다.");
             throw new CustomException(PASSWORD_NOT_MATCH);
         }
 
         return member;
     }
 
-
+    /**
+     * 이메일을 이용하여 저장소에 이메일과 일치하는지를 찾는 회원
+     * @param email
+     * @return
+     * @throws UsernameNotFoundException
+     */
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
@@ -70,7 +83,6 @@ public class AuthService implements UserDetailsService {
     }
 
 
-
     private UserDetails createUserDetails(String username, String password, MemberType memberType) {
         return User.withUsername(username)
                 .password(this.passwordEncoder.encode(password))
@@ -81,14 +93,12 @@ public class AuthService implements UserDetailsService {
 
     private Manager checkManagerEmail(String email) {
         return this.managerRepository.findByEmail(email)
-//                .orElseThrow(() -> new RuntimeException("매니져를 찾지 못했습니다."));
-                    .orElseThrow(() -> new CustomException(MANAGER_NOT_FOUND));
+                .orElseThrow(() -> new CustomException(MANAGER_NOT_FOUND));
     }
 
     private Member checkUserEmail(String email) {
         return this.memberRepository.findByEmail(email)
-//                .orElseThrow(() -> new RuntimeException("멤버를 찾지 못했씁니다."));
-                        .orElseThrow(() -> new CustomException(USER_NOT_FOUND));
+                .orElseThrow(() -> new CustomException(USER_NOT_FOUND));
     }
 
 }

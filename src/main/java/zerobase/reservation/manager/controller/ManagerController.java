@@ -7,7 +7,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import zerobase.reservation.manager.dto.ManagerDTO;
 import zerobase.reservation.manager.dto.RegisterManager;
-import zerobase.reservation.manager.entity.Manager;
 import zerobase.reservation.manager.repository.ManagerRepository;
 import zerobase.reservation.manager.service.ManagerService;
 
@@ -17,8 +16,12 @@ import zerobase.reservation.manager.service.ManagerService;
 public class ManagerController {
 
     private final ManagerService managerService;
-    private final ManagerRepository managerRepository;
 
+    /**
+     * 회원 가입 매니져
+     * @param manager
+     * @return
+     */
 
     @PostMapping("/register/manager")
     public ResponseEntity<?> regsiter(@RequestBody RegisterManager manager) {
@@ -26,7 +29,12 @@ public class ManagerController {
         return new ResponseEntity<>(register, HttpStatus.OK);
     }
 
-    // TODO 파트너일떄만 검색가능하게 만들기
+    /**
+     * 회원 정보 조회
+     * @param id
+     * @return
+     */
+
     @GetMapping("/partner/info")
     @PreAuthorize("hasAnyRole('ROLE_PARTNER')")
     public ResponseEntity<?> getPartnerInfo(@RequestParam("id") Long id) {

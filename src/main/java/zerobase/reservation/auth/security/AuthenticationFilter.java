@@ -38,14 +38,16 @@ public class AuthenticationFilter extends OncePerRequestFilter {
                                     HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
 
+        //헤더 가지고 오기
         String authorization = request.getHeader(tokenHeader);
 
+        // 토큰 유효성 검사
         if (authorization == null || !authorization.startsWith(tokenPrefix + " ")) {
             filterChain.doFilter(request, response);
             return;
         }
 
-        String token = authorization.substring(tokenPrefix.length()).trim(); // 토큰 접두사 이후 문자열 추출
+        String token = authorization.substring(tokenPrefix.length()).trim();
 
         if (jwtUtil.isExpired(token) || !jwtUtil.validateToken(token)) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
@@ -69,11 +71,10 @@ public class AuthenticationFilter extends OncePerRequestFilter {
         }
 
 
+        //유효성 검사 이후 필터를 통한 토큰 반환
         Authentication authToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
 
         SecurityContextHolder.getContext().setAuthentication(authToken);
-//        String newToken = jwtUtil.createToken(email, memberType);
-//        response.addHeader("Authorization", tokenPrefix + " " + newToken);
 
         filterChain.doFilter(request, response);
     }

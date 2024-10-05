@@ -43,7 +43,6 @@ public class Member extends BaseEntity implements UserDetails {
     @Enumerated(EnumType.STRING)
     private MemberType memberType;
 
-    //TODO 시큐리티 구현
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority("ROLE_MEMBER"));

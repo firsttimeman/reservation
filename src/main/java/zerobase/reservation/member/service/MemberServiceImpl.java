@@ -25,7 +25,6 @@ public class MemberServiceImpl implements MemberService {
         boolean exists = memberRepository.existsByEmail(registerMember.getEmail());
 
         if(exists) {
-//            throw  new RuntimeException("이미 존재하는 유저입니다");
             throw new CustomException(ALREADY_EXIST_USER);
         }
 
@@ -46,7 +45,6 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public MemberDTO memberDetail(Long id) {
         Member member = memberRepository.findById(id)
-//                .orElseThrow(() -> new RuntimeException("유저가 없습니다."));
        .orElseThrow(() -> new CustomException(USER_NOT_FOUND));
         return MemberDTO.fromEntity(member);
     }

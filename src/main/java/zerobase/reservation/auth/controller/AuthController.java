@@ -4,7 +4,6 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,8 +14,6 @@ import zerobase.reservation.auth.service.AuthService;
 import zerobase.reservation.manager.entity.Manager;
 import zerobase.reservation.member.entity.Member;
 
-import java.util.Map;
-
 @RestController
 @RequestMapping("/api/login")
 @RequiredArgsConstructor
@@ -24,6 +21,12 @@ public class AuthController {
 
     private final AuthService authService;
     private final JWTUtil jwtUtil;
+
+    /**
+     * 매니져 로그인
+     * @param login 요청
+     * @return 토근 완료 반환
+     */
 
     @PostMapping("/manager")
     public ResponseEntity<?> managerLogin(@RequestBody @Valid Login login) {
@@ -36,6 +39,12 @@ public class AuthController {
         return ResponseEntity.ok().headers(headers).body("Login successful");
     }
 
+
+    /**
+     * 사용자 로그인
+     * @param login 요청
+     * @return 토근 완료 반환
+     */
 
     @PostMapping("/member")
     public ResponseEntity<?> userLogin(@RequestBody @Valid Login login){

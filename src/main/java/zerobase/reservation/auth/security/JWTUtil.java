@@ -72,7 +72,6 @@ public class JWTUtil {
         }
     }
 
-    // 토큰에서 Claims 추출
     private Claims parseClaims(String token) {
         try {
             return Jwts.parser()

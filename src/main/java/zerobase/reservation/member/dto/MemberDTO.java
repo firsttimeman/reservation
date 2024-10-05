@@ -1,7 +1,6 @@
 package zerobase.reservation.member.dto;
 
 import lombok.*;
-import lombok.extern.slf4j.Slf4j;
 import zerobase.reservation.auth.type.MemberType;
 import zerobase.reservation.member.entity.Member;
 
@@ -20,7 +19,7 @@ public class MemberDTO {
 
 
     public static MemberDTO fromEntity(Member member) {
-       return MemberDTO.builder()
+        return MemberDTO.builder()
                 .userId(member.getUserId())
                 .username(member.getUsername())
                 .password(member.getPassword())

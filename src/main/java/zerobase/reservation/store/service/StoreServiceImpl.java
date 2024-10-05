@@ -3,6 +3,7 @@ package zerobase.reservation.store.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import zerobase.reservation.global.exception.CustomException;
 import zerobase.reservation.manager.entity.Manager;
 import zerobase.reservation.manager.repository.ManagerRepository;
 import zerobase.reservation.store.dto.CreateStore;
@@ -13,6 +14,8 @@ import zerobase.reservation.store.repository.StoreRepository;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static zerobase.reservation.global.type.ErrorCode.*;
 
 @Slf4j
 @Service
@@ -26,10 +29,10 @@ public class StoreServiceImpl implements StoreService {
     public StoreDTO createStore(CreateStore.Request request) {
 
         Manager manager = managerRepository.findById(request.getManagerId())
-                .orElseThrow(() -> new RuntimeException("유저가 없음"));
+                .orElseThrow(() -> new CustomException(USER_NOT_FOUND));
 
         if(storeRepository.existsByStoreName(request.getStoreName())) {
-            throw new RuntimeException("이미 존재하는 가게입니다");
+            throw new CustomException(ALREADY_EXIST_STORE);
         }
 
         return StoreDTO.fromEntity(storeRepository.save(Store.builder()
@@ -44,10 +47,10 @@ public class StoreServiceImpl implements StoreService {
     @Override
     public void deleteStore(Long managerId, Long storeId) {
         Store store = storeRepository.findById(storeId)
-                .orElseThrow(() -> new RuntimeException("존재하지 않는 식당"));
+                .orElseThrow(() -> new CustomException(STORE_NOT_FOUND));
 
         if(!store.getManager().getManId().equals(managerId)) {
-            throw new RuntimeException("가게 알맞지 않습니다.");
+            throw new CustomException(STORE_NOT_MATCH_MANAGER);
         }
 
         storeRepository.delete(store);
@@ -59,12 +62,12 @@ public class StoreServiceImpl implements StoreService {
     public StoreDTO updateStore(Long id, UpdateStore.Request request) {
 
         Store store = storeRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("매장이 존재하지 않습니다."));
+                .orElseThrow(() -> new CustomException(STORE_NOT_FOUND));
         log.info("Store manager ID: " + store.getManager().getManId());
         log.info("Passed manager ID: " +id);
 
         if(!store.getManager().getManId().equals(request.getManagerId())) {
-            throw new RuntimeException("매장이 맞지 않습니다.");
+            throw new CustomException(STORE_NOT_MATCH_MANAGER);
         }
 
         store.setStoreName(request.getStoreName());
@@ -78,7 +81,7 @@ public class StoreServiceImpl implements StoreService {
     public StoreDTO detailStore(String name) {
 
         Store store = storeRepository.findByStoreName(name)
-                .orElseThrow(() -> new RuntimeException("매장이 없습니다"));
+                .orElseThrow(() -> new CustomException(STORE_NOT_FOUND));
 
 
         return StoreDTO.fromEntity(store);
@@ -90,7 +93,7 @@ public class StoreServiceImpl implements StoreService {
         List<Store> storeList = storeRepository.findByManager_ManId(id);
 
         if(storeList.isEmpty()) {
-            throw new RuntimeException("가게가 존재하지 않습니다.");
+            throw new CustomException(STORE_NOT_FOUND);
         }
 
         return storeList.stream()

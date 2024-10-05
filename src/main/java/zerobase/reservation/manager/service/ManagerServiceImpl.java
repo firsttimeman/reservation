@@ -9,24 +9,23 @@ import zerobase.reservation.manager.dto.ManagerDTO;
 import zerobase.reservation.manager.dto.RegisterManager;
 import zerobase.reservation.manager.entity.Manager;
 import zerobase.reservation.manager.repository.ManagerRepository;
-import zerobase.reservation.member.entity.Member;
-import zerobase.reservation.member.repository.MemberRepository;
 
 import static zerobase.reservation.global.type.ErrorCode.ALREADY_EXIST_USER;
 import static zerobase.reservation.global.type.ErrorCode.MANAGER_NOT_FOUND;
 
 @Service
 @AllArgsConstructor
-public class ManagerServiceImpl implements  ManagerService{
+public class ManagerServiceImpl implements ManagerService {
 
     private final ManagerRepository managerRepository;
     private final PasswordEncoder passwordEncoder;
 
+
+
     @Override
     public ManagerDTO register(RegisterManager registerManager) {
         boolean exists = managerRepository.existsByEmail(registerManager.getEmail());
-        if(exists) {
-//            throw new RuntimeException("유저가 존재합니다");
+        if (exists) {
             throw new CustomException(ALREADY_EXIST_USER);
         }
 
@@ -46,8 +45,7 @@ public class ManagerServiceImpl implements  ManagerService{
     @Override
     public ManagerDTO memberDetail(Long id) {
         Manager manager = managerRepository.findById(id).
-//                orElseThrow(() -> new RuntimeException("사용자가 없음"));
-          orElseThrow(() -> new CustomException(MANAGER_NOT_FOUND));
+        orElseThrow(() -> new CustomException(MANAGER_NOT_FOUND));
 
         return ManagerDTO.fromEntity(manager);
     }

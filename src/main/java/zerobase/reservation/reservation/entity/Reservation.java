@@ -42,11 +42,4 @@ public class Reservation extends BaseEntity {
     private LocalTime reservationTime;
 
 
-
-
-
-
-
-
-
 }

@@ -17,6 +17,12 @@ public class MemberController {
 
     private final MemberService memberService;
 
+    /**
+     * 회원 가입 유저
+     * @param member
+     * @return
+     */
+
 
     @PostMapping("/register/member")
     public ResponseEntity<?> register(@RequestBody RegisterMember member) {
@@ -25,7 +31,12 @@ public class MemberController {
         return new ResponseEntity<>(register, HttpStatus.OK);
     }
 
-    // TODO 유저정보 검색기능 구현 시큐리티로 구현
+    /**
+     * 회원 정보 조회 (매니져, 유저)
+     * @param id
+     * @return
+     */
+
     @GetMapping("/member/info")
     @PreAuthorize("hasAnyRole('ROLE_MEMBER', 'ROLE_PARTNER')")
     public ResponseEntity<?> getinfo(@RequestParam("id") Long id) {
