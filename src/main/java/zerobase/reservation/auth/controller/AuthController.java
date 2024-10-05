@@ -2,6 +2,7 @@ package zerobase.reservation.auth.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,15 +29,23 @@ public class AuthController {
     public ResponseEntity<?> managerLogin(@RequestBody @Valid Login login) {
         Manager manager = authService.authenticateManager(login);
         String token = jwtUtil.createToken(manager.getEmail(), manager.getMemberType());
-        return ResponseEntity.ok(Map.of("token", "Bearer " + token));
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "Bearer " + token);
+
+        return ResponseEntity.ok().headers(headers).body("Login successful");
     }
 
 
     @PostMapping("/member")
     public ResponseEntity<?> userLogin(@RequestBody @Valid Login login){
-        Member member = this.authService.authenticateCustomer(login);
+        Member member = authService.authenticateCustomer(login);
         String token = jwtUtil.createToken(member.getEmail(), member.getMemberType());
-        return ResponseEntity.ok(Map.of("token", "Bearer " + token));
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "Bearer " + token);
+
+        return ResponseEntity.ok().headers(headers).body("Login successful");
     }
 
 }

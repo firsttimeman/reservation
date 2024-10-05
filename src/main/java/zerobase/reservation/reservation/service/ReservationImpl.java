@@ -2,6 +2,7 @@ package zerobase.reservation.reservation.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import zerobase.reservation.global.exception.CustomException;
 import zerobase.reservation.manager.repository.ManagerRepository;
 import zerobase.reservation.member.entity.Member;
 import zerobase.reservation.member.repository.MemberRepository;
@@ -21,6 +22,8 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
+import static zerobase.reservation.global.type.ErrorCode.*;
+
 @Service
 @RequiredArgsConstructor
 public class ReservationImpl implements ReservationService {
@@ -34,10 +37,12 @@ public class ReservationImpl implements ReservationService {
     public ReservationDTO createReservation(CreateReservation.Request request) {
         Store store = storeRepository.findById(request.getStoreId())
                 .orElseThrow(() -> new RuntimeException("가게를 찾을수가 없습니다."));
+//                  .orElseThrow(() -> new CustomException(STORE_NOT_FOUND));
 
 
         Member member = memberRepository.findById(request.getUserId())
                 .orElseThrow(() -> new RuntimeException("사용자를 찾을수가 없습니다."));
+//                  .orElseThrow(() -> new CustomException(USER_NOT_FOUND));
 
 
         LocalTime reservationTime = request.getReservationTime();
@@ -47,6 +52,7 @@ public class ReservationImpl implements ReservationService {
 
         if(exists) {
             throw new RuntimeException("이미 존재하는 예약입니다.");
+//            throw new CustomException(ALREADY_RESERVED);
         }
 
         Reservation reservation = reservationRepository.save(Reservation.builder()
@@ -67,10 +73,12 @@ public class ReservationImpl implements ReservationService {
 
         Reservation reservation = reservationRepository.findById(reservationId)
                 .orElseThrow(() -> new RuntimeException("예약이 존재하지 않습니다."));
+//                   .orElseThrow(() -> new CustomException(RESERVATION_NOT_FOUND));
 
         ReservationStatus reservationStatus = reservation.getReservationStatus();
         if(reservationStatus.equals(request.getReservationStatus())) {
             throw new RuntimeException("예약 상태가 다릅니다.");
+//            throw new CustomException(RESERVATION_STATUS_CHECK_ERROR);
         }
 
         reservation.setReservationStatus(request.getReservationStatus());
@@ -86,6 +94,7 @@ public class ReservationImpl implements ReservationService {
 
         if(reservations.isEmpty()) {
             throw new RuntimeException("예약이 없습니다.");
+//            throw new CustomException(RESERVATION_NOT_FOUND);
         }
 
 
@@ -97,20 +106,23 @@ public class ReservationImpl implements ReservationService {
 
         Reservation reservation = reservationRepository.findById(reservationId)
                 .orElseThrow(() -> new RuntimeException("예약이 없습니다."));
+//                      .orElseThrow(() -> new CustomException(RESERVATION_NOT_FOUND));
 
+
+        validationReservation(reservation, request.getArrivalTime().toLocalTime());
 
         reservation.setArrivalStatus(ArrivalStatus.ARRIVED);
         reservation.setReservationStatus(ReservationStatus.FINISHED);
 
 
 
-        if(!reservation.getReservationStatus().equals(ReservationStatus.APPROVE)) {
-            throw new RuntimeException("예약 확인 상태 에러");
-        }
-
-        if(request.getArrivalTime().toLocalTime().isAfter(reservation.getReservationTime())) {
-            throw new RuntimeException("예약시간보다 더 늦었습니다.");
-        }
+//        if(!reservation.getReservationStatus().equals(ReservationStatus.APPROVE)) {
+//            throw new RuntimeException("예약 확인 상태 에러");
+//        }
+//
+//        if(request.getArrivalTime().toLocalTime().isAfter(reservation.getReservationTime())) {
+//            throw new RuntimeException("예약시간보다 더 늦었습니다.");
+//        }
 
 
         return ReservationDTO.fromEntity(reservationRepository.save(reservation));
@@ -121,10 +133,21 @@ public class ReservationImpl implements ReservationService {
 
         Reservation reservation = reservationRepository.findById(reservationId)
                 .orElseThrow(() -> new RuntimeException("예약을 찾을수가 없습니다."));
+//            .orElseThrow(() -> new CustomException(RESERVATION_NOT_FOUND));
 
         reservation.setReservationStatus(ReservationStatus.CANCEL);
 
         return ReservationDTO.fromEntity(reservationRepository.save(reservation));
 
+    }
+
+    private void validationReservation(Reservation reservation, LocalTime arrivalTime) {
+        if (!reservation.getReservationStatus().equals(ReservationStatus.APPROVE)) {
+            throw new CustomException(RESERVATION_STATUS_CHECK_ERROR);
+        } else if (arrivalTime.isAfter(reservation.getReservationTime())) {
+            throw new CustomException(RESERVATION_TIME_EXCEEDED);
+        } else if (arrivalTime.isBefore(reservation.getReservationTime().minusMinutes(10L))) {
+            throw new CustomException(CHECK_IT_10_MINUTES_BEFORE_THE_RESERVATION_TIME);
+        }
     }
 }

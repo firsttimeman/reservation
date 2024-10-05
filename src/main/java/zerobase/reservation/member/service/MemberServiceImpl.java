@@ -4,10 +4,14 @@ import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import zerobase.reservation.auth.type.MemberType;
+import zerobase.reservation.global.exception.CustomException;
 import zerobase.reservation.member.dto.MemberDTO;
 import zerobase.reservation.member.dto.RegisterMember;
 import zerobase.reservation.member.entity.Member;
 import zerobase.reservation.member.repository.MemberRepository;
+
+import static zerobase.reservation.global.type.ErrorCode.ALREADY_EXIST_USER;
+import static zerobase.reservation.global.type.ErrorCode.USER_NOT_FOUND;
 
 @Service
 @AllArgsConstructor
@@ -21,7 +25,8 @@ public class MemberServiceImpl implements MemberService {
         boolean exists = memberRepository.existsByEmail(registerMember.getEmail());
 
         if(exists) {
-            throw  new RuntimeException("이미 존재하는 유저입니다");
+//            throw  new RuntimeException("이미 존재하는 유저입니다");
+            throw new CustomException(ALREADY_EXIST_USER);
         }
 
         registerMember.setPassword(passwordEncoder.encode(registerMember.getPassword()));
@@ -41,8 +46,8 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public MemberDTO memberDetail(Long id) {
         Member member = memberRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("유저가 없습니다."));
-
+//                .orElseThrow(() -> new RuntimeException("유저가 없습니다."));
+       .orElseThrow(() -> new CustomException(USER_NOT_FOUND));
         return MemberDTO.fromEntity(member);
     }
 }

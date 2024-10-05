@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import lombok.*;
-import zerobase.reservation.BaseEntity;
+import zerobase.reservation.global.entity.BaseEntity;
 import zerobase.reservation.member.entity.Member;
 import zerobase.reservation.reservation.entity.Reservation;
 import zerobase.reservation.store.entity.Store;

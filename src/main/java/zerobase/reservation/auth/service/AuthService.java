@@ -9,6 +9,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import zerobase.reservation.auth.dto.Login;
 import zerobase.reservation.auth.type.MemberType;
+import zerobase.reservation.global.exception.CustomException;
 import zerobase.reservation.manager.entity.Manager;
 import zerobase.reservation.manager.repository.ManagerRepository;
 import zerobase.reservation.member.entity.Member;
@@ -16,6 +17,7 @@ import zerobase.reservation.member.repository.MemberRepository;
 
 import static zerobase.reservation.auth.type.MemberType.MEMBER;
 import static zerobase.reservation.auth.type.MemberType.PARTNER;
+import static zerobase.reservation.global.type.ErrorCode.*;
 
 @Service
 @RequiredArgsConstructor
@@ -29,7 +31,8 @@ public class AuthService implements UserDetailsService {
         Manager manager = checkManagerEmail(login.getEmail());
 
         if (!passwordEncoder.matches(login.getPassword(), manager.getPassword())) {
-            throw new RuntimeException("비번이 일치하지 않습니다.");
+//            throw new RuntimeException("비번이 일치하지 않습니다.");
+            throw new CustomException(PASSWORD_NOT_MATCH);
         }
 
         return manager;
@@ -40,7 +43,8 @@ public class AuthService implements UserDetailsService {
         Member member = checkUserEmail(login.getEmail());
 
         if (!this.passwordEncoder.matches(login.getPassword(), member.getPassword())) {
-            throw new  RuntimeException("비번이 일치하지 않습니다.");
+//            throw new  RuntimeException("비번이 일치하지 않습니다.");
+            throw new CustomException(PASSWORD_NOT_MATCH);
         }
 
         return member;
@@ -77,12 +81,14 @@ public class AuthService implements UserDetailsService {
 
     private Manager checkManagerEmail(String email) {
         return this.managerRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("매니져를 찾지 못했습니다."));
+//                .orElseThrow(() -> new RuntimeException("매니져를 찾지 못했습니다."));
+                    .orElseThrow(() -> new CustomException(MANAGER_NOT_FOUND));
     }
 
     private Member checkUserEmail(String email) {
         return this.memberRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("멤버를 찾지 못했씁니다."));
+//                .orElseThrow(() -> new RuntimeException("멤버를 찾지 못했씁니다."));
+                        .orElseThrow(() -> new CustomException(USER_NOT_FOUND));
     }
 
 }

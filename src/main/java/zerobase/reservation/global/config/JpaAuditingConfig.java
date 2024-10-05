@@ -1,4 +1,4 @@
-package zerobase.reservation;
+package zerobase.reservation.global.config;
 
 
 import org.springframework.context.annotation.Configuration;

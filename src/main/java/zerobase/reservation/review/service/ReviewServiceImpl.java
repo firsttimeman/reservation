@@ -30,24 +30,17 @@ public class ReviewServiceImpl implements ReviewService {
     public ReviewDTO createReview(Long userId, Long storeId, Long reservationId, CreateReview.Request request) {
         Member member = memberRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("유저가 존재하지 않습니다."));
+//               .orElseThrow(() -> new CustomException(USER_NOT_FOUND));
 
         Store store = storeRepository.findById(storeId)
                 .orElseThrow(() -> new RuntimeException("가게가 존재하지 않습니다."));
+//         .orElseThrow(() -> new CustomException(STORE_NOT_FOUND));
 
         Reservation reservation = reservationRepository.findById(reservationId)
                 .orElseThrow(() -> new RuntimeException("예약번호가 존재하지 않습니다"));
+//               .orElseThrow(() -> new CustomException(RESERVATION_NOT_FOUND));
 
-        if(!reservation.getMember().getUserId().equals(member.getUserId())) {
-            throw new RuntimeException("유저가 존재하지 않습니다.");
-        }
-
-        if(reviewRepository.existsByReservation_ReservationId(reservationId)) {
-            throw new RuntimeException("이미 존재하는 리뷰입니다.");
-        }
-
-        if(!reservation.getReservationStatus().equals(ReservationStatus.FINISHED)) {
-            throw new RuntimeException("리뷰를 작성할수가 없습니다.");
-        }
+        validationReviewStatus(reservation, member);
 
         Review save = reviewRepository.save(Review.builder()
                 .content(request.getContent())
@@ -62,10 +55,28 @@ public class ReviewServiceImpl implements ReviewService {
         return ReviewDTO.fromEntity(save);
     }
 
+    private void validationReviewStatus(Reservation reservation, Member member) {
+        if(!reservation.getMember().getUserId().equals(member.getUserId())) {
+            throw new RuntimeException("유저가 존재하지 않습니다.");
+//            throw new CustomException(USER_AUTHORITY_NOT_MATCH);
+        }
+
+        if(reviewRepository.existsByReservation_ReservationId(reservation.getReservationId())) {
+            throw new RuntimeException("이미 존재하는 리뷰입니다.");
+//            throw new CustomException(ALREADY_EXIST_REVIEW);
+        }
+
+        if(!reservation.getReservationStatus().equals(ReservationStatus.FINISHED)) {
+            throw new RuntimeException("리뷰를 작성할수가 없습니다.");
+//            throw new CustomException(REVIEW_NOT_AVAILABLE);
+        }
+    }
+
     @Override
     public void deleteReview(Long reviewId) {
         reviewRepository.delete(reviewRepository.findById(reviewId)
                 .orElseThrow(() -> new RuntimeException("리뷰가 존재하지 않습니다.")));
+//          .orElseThrow(() -> new CustomException(REVIEW_NOT_FOUND)));
 
     }
 
@@ -74,12 +85,15 @@ public class ReviewServiceImpl implements ReviewService {
 
         Review review = reviewRepository.findById(reviewId)
                 .orElseThrow(() -> new RuntimeException("리뷰를 찾을수가 없습니다."));
+//                .orElseThrow(() -> new CustomException(REVIEW_NOT_FOUND));
 
         if (request.getRating() > 5 || request.getRating() < 0) {
             throw new RuntimeException("리뷰의 별점이 잘못됬습니다.");
+//            throw new CustomException(REVIEW_RATING_RANGE_OVER);
         }
         if (request.getContent().length() > 300) {
             throw new RuntimeException("리뷰의 텍스트가 300자 넘어갑니다.");
+//            throw new CustomException(REVIEW_TEXT_TOO_LONG);
         }
 
         review.setRating(request.getRating());

@@ -42,7 +42,7 @@ public class JWTUtil {
                 .build()
                 .parseSignedClaims(token)
                 .getPayload()
-                .get("role", String.class);
+                .get("roles", String.class);
     }
 
     // 토큰 만료 여부 확인
@@ -87,10 +87,16 @@ public class JWTUtil {
 
     // JWT 토큰 생성
     public String createToken(String userEmail, MemberType memberType) {
+
+        if (memberType == null) {
+            throw new IllegalArgumentException("MemberType cannot be null");
+        }
+
+
         Date now = new Date();
         return Jwts.builder()
                 .claim("email", userEmail)
-                .claim("roles", memberType)
+                .claim("roles", memberType.name())
                 .claim("jti", generateRandomToken())
                 .issuedAt(now)
                 .expiration(new Date(now.getTime() + tokenValidTime))

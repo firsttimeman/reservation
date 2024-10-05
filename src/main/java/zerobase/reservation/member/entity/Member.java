@@ -7,7 +7,7 @@ import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import zerobase.reservation.BaseEntity;
+import zerobase.reservation.global.entity.BaseEntity;
 import zerobase.reservation.auth.type.MemberType;
 
 import java.util.Collection;
@@ -46,7 +46,7 @@ public class Member extends BaseEntity implements UserDetails {
     //TODO 시큐리티 구현
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("ROLE_PARTNER"));
+        return List.of(new SimpleGrantedAuthority("ROLE_MEMBER"));
     }
 
     @Override

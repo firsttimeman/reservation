@@ -2,14 +2,13 @@ package zerobase.reservation.reservation.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import zerobase.reservation.BaseEntity;
+import zerobase.reservation.global.entity.BaseEntity;
 import zerobase.reservation.member.entity.Member;
 import zerobase.reservation.reservation.type.ArrivalStatus;
 import zerobase.reservation.reservation.type.ReservationStatus;
 import zerobase.reservation.store.entity.Store;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 @Getter

@@ -1,10 +1,11 @@
 package zerobase.reservation.auth.controller;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
+import zerobase.reservation.global.type.ErrorCode;
+import zerobase.reservation.global.exception.CustomException;
 
 @Slf4j
 @RestController
@@ -12,15 +13,13 @@ public class SecurityController {
 
     @GetMapping("/exception/accessDenied")
     public ResponseEntity<String> accessDenied() {
-        log.info("Access Denied - SecurityController");
-        return new ResponseEntity<>("{\"error\": \"Access Denied\", \"message\": \"You do not have permission to access this resource.\"}",
-                HttpStatus.FORBIDDEN);
+        log.info("INVALID_ACCESS_TOKEN - SecurityController");
+        throw new CustomException(ErrorCode.INVALID_ACCESS_TOKEN);
     }
 
     @GetMapping("/exception/unauthorized")
     public ResponseEntity<String> unAuthorized() {
-        log.info("Unauthorized Access - SecurityController");
-        return new ResponseEntity<>("{\"error\": \"Unauthorized\", \"message\": \"You are not authorized to access this resource.\"}",
-                HttpStatus.UNAUTHORIZED);
+        log.info("JWT_TOKEN_WRONG_TYPE - SecurityController");
+        throw new CustomException(ErrorCode.JWT_TOKEN_WRONG_TYPE);
     }
 }
